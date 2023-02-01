@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "IInteractable.h"
+#include "PlayerCharacter.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "DialogStarter.generated.h"
@@ -26,8 +27,16 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	USceneComponent* Root;
 
+	UPROPERTY(EditDefaultsOnly)
+	TArray<FString> DialogsToShow;
+
+	int CurrentDialogIndex;
+
 
 protected:
+
+	APlayerCharacter* PlayerCharacterRef;
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

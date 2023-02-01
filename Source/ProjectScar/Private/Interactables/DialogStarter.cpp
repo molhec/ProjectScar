@@ -3,6 +3,9 @@
 
 #include "Interactables/DialogStarter.h"
 
+#include "DialogWidget.h"
+#include "PlayerCharacter.h"
+
 // Sets default values
 ADialogStarter::ADialogStarter()
 {
@@ -30,7 +33,25 @@ void ADialogStarter::Interact(AActor* Caller)
 {
 	IIInteractable::Interact(Caller);
 
-	GEngine->AddOnScreenDebugMessage(0, 1, FColor::Red, TEXT("Interaction Successfull"), true);
+	if(CurrentDialogIndex > DialogsToShow.Num() - 1)
+	{
+		CurrentDialogIndex = 0;
+
+		if(PlayerCharacterRef != nullptr)
+			PlayerCharacterRef->HideDialog();
+		
+		return;
+	}
+
+	const APlayerCharacter* character = Cast<APlayerCharacter>(Caller);
+
+	if(character != nullptr)
+	{
+		PlayerCharacterRef = Cast<APlayerCharacter>(Caller);
+		PlayerCharacterRef->ShowDialog(DialogsToShow[CurrentDialogIndex]);
+
+		CurrentDialogIndex++;
+	}
 }
 
 void ADialogStarter::StartFocus()
@@ -41,6 +62,11 @@ void ADialogStarter::StartFocus()
 void ADialogStarter::EndFocus()
 {
 	IIInteractable::EndFocus();
+
+	CurrentDialogIndex = 0;
+	if(PlayerCharacterRef != nullptr)
+		PlayerCharacterRef->HideDialog();
+	PlayerCharacterRef = nullptr;
 }
 
 // Called every frame

@@ -6,6 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Blueprint/UserWidget.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -55,6 +56,11 @@ void APlayerCharacter::BeginPlay()
 
 	TriggerForInteraction->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnBeginOverlapTriggerInteractions);
 	TriggerForInteraction->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnOverlapEndTriggerInteractions);
+
+	DialogInstance = CreateWidget<UUserWidget>(GetWorld(), DialogWidgetObj);
+	DialogInstance->AddToViewport();
+
+	DialogInstance->SetVisibility(ESlateVisibility::Hidden);
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -108,7 +114,27 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 void APlayerCharacter::TryToInteract(const FInputActionValue& Value)
 {
-	Cast<IIInteractable>(ObjNearToInteract)->Interact(this);
+	
+	if(ObjNearToInteract != nullptr)
+	{
+		Cast<IIInteractable>(ObjNearToInteract)->Interact(this);
+	}
+}
+
+void APlayerCharacter::ShowDialog(FString stringToShow)
+{
+	DialogInstance->SetVisibility(ESlateVisibility::Visible);
+	UDialogWidget* dialogWidget = Cast<UDialogWidget>(DialogInstance);
+
+	if(dialogWidget != nullptr)
+	{
+		dialogWidget->SetDialog(stringToShow);
+	}
+}
+
+void APlayerCharacter::HideDialog()
+{
+	DialogInstance->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void APlayerCharacter::SetHasRifle(bool bNewHasRifle)

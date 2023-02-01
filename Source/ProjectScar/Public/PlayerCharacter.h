@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DialogWidget.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "Components/BoxComponent.h"
@@ -73,8 +74,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	bool GetHasRifle();
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDialogWidget> DialogWidgetObj;
+
+	UPROPERTY(EditDefaultsOnly)
+	UUserWidget* DialogInstance;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Interactions)
 	AActor* ObjNearToInteract;
+
+	void ShowDialog(FString stringToShow);
+
+	void HideDialog();
 	
 	UFUNCTION()
 	void OnBeginOverlapTriggerInteractions(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
