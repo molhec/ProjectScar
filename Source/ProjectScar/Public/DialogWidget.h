@@ -19,6 +19,18 @@ public:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UTextBlock* DialogText;
 
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class USlider* Slider;
+	
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UCanvasPanel* DialogPanel;
+
 	UFUNCTION()
 	void SetDialog(FString Message);
+
+	UFUNCTION()
+	void SetSliderValue(float NewValue);
+
+	UFUNCTION()
+	void SetDialogPanelVisibility(bool NewValue);
 };

@@ -33,6 +33,9 @@ class APlayerCharacter : public ACharacter
 	UPROPERTY(VisibleDefaultsOnly)
 	UBoxComponent* TriggerForInteraction;
 
+	UPROPERTY(EditAnywhere, Category=Infection)
+	float InfectionValueToDie;
+
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;
@@ -54,7 +57,12 @@ public:
 	APlayerCharacter();
 
 protected:
+
+	float CurrentInfectionValue;
+	
 	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaSeconds) override;
 
 public:
 		

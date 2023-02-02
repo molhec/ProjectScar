@@ -1,6 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "PlayerCharacter.h"
+
+#include <string>
+
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -37,7 +40,6 @@ APlayerCharacter::APlayerCharacter()
 	Mesh1P->CastShadow = false;
 	//Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
-
 }
 
 void APlayerCharacter::BeginPlay()
@@ -60,7 +62,28 @@ void APlayerCharacter::BeginPlay()
 	DialogInstance = CreateWidget<UUserWidget>(GetWorld(), DialogWidgetObj);
 	DialogInstance->AddToViewport();
 
-	DialogInstance->SetVisibility(ESlateVisibility::Hidden);
+	UDialogWidget* dialogWidget = Cast<UDialogWidget>(DialogInstance);
+
+	if(dialogWidget != nullptr)
+	{
+		dialogWidget->SetDialogPanelVisibility(false);
+	}
+
+	CurrentInfectionValue = InfectionValueToDie;
+}
+
+void APlayerCharacter::Tick(float DeltaSeconds)
+{
+	CurrentInfectionValue -= DeltaSeconds;
+
+	UDialogWidget* dialogWidget = Cast<UDialogWidget>(DialogInstance);
+
+	if(dialogWidget != nullptr)
+	{
+		dialogWidget->SetSliderValue(CurrentInfectionValue/InfectionValueToDie);
+	}
+
+	GEngine->AddOnScreenDebugMessage(2, DeltaSeconds, FColor::Red, "Current Infection Value: " + FString::SanitizeFloat(CurrentInfectionValue));
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -123,18 +146,23 @@ void APlayerCharacter::TryToInteract(const FInputActionValue& Value)
 
 void APlayerCharacter::ShowDialog(FString stringToShow)
 {
-	DialogInstance->SetVisibility(ESlateVisibility::Visible);
 	UDialogWidget* dialogWidget = Cast<UDialogWidget>(DialogInstance);
 
 	if(dialogWidget != nullptr)
 	{
+		dialogWidget->SetDialogPanelVisibility(true);
 		dialogWidget->SetDialog(stringToShow);
 	}
 }
 
 void APlayerCharacter::HideDialog()
 {
-	DialogInstance->SetVisibility(ESlateVisibility::Hidden);
+	UDialogWidget* dialogWidget = Cast<UDialogWidget>(DialogInstance);
+
+	if(dialogWidget != nullptr)
+	{
+		dialogWidget->SetDialogPanelVisibility(false);
+	}
 }
 
 void APlayerCharacter::SetHasRifle(bool bNewHasRifle)

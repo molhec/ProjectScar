@@ -6,8 +6,11 @@
 #include "IInteractable.h"
 #include "PlayerCharacter.h"
 #include "Components/BoxComponent.h"
+#include "Delegates/DelegateCombinations.h"
 #include "GameFramework/Actor.h"
 #include "DialogStarter.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTriggerDelegate);
 
 UCLASS()
 class PROJECTSCAR_API ADialogStarter : public AActor, public IIInteractable
@@ -29,6 +32,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	TArray<FString> DialogsToShow;
+
+	UPROPERTY(BlueprintAssignable, Category=CustomEvents)
+	FTriggerDelegate OnTriggerAction;
 
 	int CurrentDialogIndex;
 
