@@ -17,6 +17,8 @@ class UCameraComponent;
 class UAnimMontage;
 class USoundBase;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTriggerStartDialog, FString, Dialog);
+
 UCLASS(config=Game)
 class APlayerCharacter : public ACharacter
 {
@@ -33,6 +35,9 @@ class APlayerCharacter : public ACharacter
 	UPROPERTY(VisibleDefaultsOnly)
 	UBoxComponent* TriggerForInteraction;
 
+	UPROPERTY(EditAnywhere, Category=Infection)
+	float InfectionValueToDie;
+
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;
@@ -48,15 +53,22 @@ class APlayerCharacter : public ACharacter
 	// Interact Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* InteractAction;
-
 	
 public:
 	APlayerCharacter();
 
 protected:
+
+	float CurrentInfectionValue;
+	
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaSeconds) override;
+
 public:
+
+	UPROPERTY()
+	FTriggerStartDialog OnStartDialog;
 		
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -85,7 +97,11 @@ public:
 
 	void ShowDialog(FString stringToShow);
 
+	void ShowFlashback(UTexture2D* TextureFlashback);
+
 	void HideDialog();
+
+	void CureInfection(float InfectionToCure);
 	
 	UFUNCTION()
 	void OnBeginOverlapTriggerInteractions(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,

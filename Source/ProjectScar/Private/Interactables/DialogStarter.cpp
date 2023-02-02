@@ -11,15 +11,6 @@ ADialogStarter::ADialogStarter()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root Component"));
-	SetRootComponent(Root);
-
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh Component"));
-	StaticMesh->SetupAttachment(Root);
-
-	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Component"));
-	BoxComponent->SetupAttachment(Root);
 }
 
 // Called when the game starts or when spawned
@@ -31,7 +22,7 @@ void ADialogStarter::BeginPlay()
 
 void ADialogStarter::Interact(AActor* Caller)
 {
-	IIInteractable::Interact(Caller);
+	Super::Interact(Caller);
 
 	if(CurrentDialogIndex > DialogsToShow.Num() - 1)
 	{
@@ -43,11 +34,8 @@ void ADialogStarter::Interact(AActor* Caller)
 		return;
 	}
 
-	const APlayerCharacter* character = Cast<APlayerCharacter>(Caller);
-
-	if(character != nullptr)
+	if(PlayerCharacterRef != nullptr)
 	{
-		PlayerCharacterRef = Cast<APlayerCharacter>(Caller);
 		PlayerCharacterRef->ShowDialog(DialogsToShow[CurrentDialogIndex]);
 
 		CurrentDialogIndex++;
@@ -56,12 +44,12 @@ void ADialogStarter::Interact(AActor* Caller)
 
 void ADialogStarter::StartFocus()
 {
-	IIInteractable::StartFocus();
+	Super::StartFocus();
 }
 
 void ADialogStarter::EndFocus()
 {
-	IIInteractable::EndFocus();
+	Super::EndFocus();
 
 	CurrentDialogIndex = 0;
 	if(PlayerCharacterRef != nullptr)
