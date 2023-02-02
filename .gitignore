@@ -49,3 +49,4 @@ Session.vim
 
 # Visual Studio
 .vs
+Plugins/Developer/RiderLink/Binaries/Win64/UnrealEditor-RD.dll
