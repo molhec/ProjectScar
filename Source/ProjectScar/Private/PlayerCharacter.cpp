@@ -70,6 +70,8 @@ void APlayerCharacter::BeginPlay()
 	}
 
 	CurrentInfectionValue = InfectionValueToDie;
+
+	OnStartDialog.AddDynamic(this, &APlayerCharacter::ShowDialog);
 }
 
 void APlayerCharacter::Tick(float DeltaSeconds)
@@ -137,7 +139,6 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 void APlayerCharacter::TryToInteract(const FInputActionValue& Value)
 {
-	
 	if(ObjNearToInteract != nullptr)
 	{
 		Cast<IIInteractable>(ObjNearToInteract)->Interact(this);
@@ -146,12 +147,23 @@ void APlayerCharacter::TryToInteract(const FInputActionValue& Value)
 
 void APlayerCharacter::ShowDialog(FString stringToShow)
 {
+	OnStartDialog.Broadcast(stringToShow);
 	UDialogWidget* dialogWidget = Cast<UDialogWidget>(DialogInstance);
 
 	if(dialogWidget != nullptr)
 	{
 		dialogWidget->SetDialogPanelVisibility(true);
 		dialogWidget->SetDialog(stringToShow);
+	}
+}
+
+void APlayerCharacter::ShowFlashback(UTexture2D* TextureFlashback)
+{
+	UDialogWidget* dialogWidget = Cast<UDialogWidget>(DialogInstance);
+
+	if(dialogWidget != nullptr)
+	{
+		dialogWidget->ShowFlashback(TextureFlashback, GetController());
 	}
 }
 
@@ -163,6 +175,14 @@ void APlayerCharacter::HideDialog()
 	{
 		dialogWidget->SetDialogPanelVisibility(false);
 	}
+}
+
+void APlayerCharacter::CureInfection(float InfectionToCure)
+{
+	CurrentInfectionValue += InfectionToCure;
+
+	if(CurrentInfectionValue > InfectionValueToDie)
+		CurrentInfectionValue = InfectionValueToDie;
 }
 
 void APlayerCharacter::SetHasRifle(bool bNewHasRifle)

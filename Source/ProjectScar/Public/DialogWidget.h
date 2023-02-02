@@ -25,6 +25,15 @@ public:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UCanvasPanel* DialogPanel;
 
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UCanvasPanel* FlashbackPanel;
+	
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UImage* FlashbackImage;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidgetAnim), Transient)
+	class UWidgetAnimation* FadeFlashback;
+
 	UFUNCTION()
 	void SetDialog(FString Message);
 
@@ -33,4 +42,18 @@ public:
 
 	UFUNCTION()
 	void SetDialogPanelVisibility(bool NewValue);
+
+	UFUNCTION()
+	void ShowFlashback(UTexture2D* Texture, AController* ControllerToPauseMovement = nullptr);
+
+	UFUNCTION()
+	void HideFlashback();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayFlashbackFadeAnimation();
+
+	AController* ControllerToStopMovement;
+
+protected:
+	virtual void NativeConstruct() override;
 };
