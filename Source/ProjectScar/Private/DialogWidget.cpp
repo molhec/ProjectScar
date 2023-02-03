@@ -58,6 +58,16 @@ void UDialogWidget::HideFlashback()
 	}
 }
 
+void UDialogWidget::ShowInteraction()
+{
+	InteractionPanel->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UDialogWidget::HideInteraction()
+{
+	InteractionPanel->SetVisibility(ESlateVisibility::Hidden);
+}
+
 void UDialogWidget::NativeConstruct()
 {
 	Super::NativeConstruct();

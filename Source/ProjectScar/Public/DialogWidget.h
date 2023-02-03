@@ -29,6 +29,9 @@ public:
 	class UCanvasPanel* FlashbackPanel;
 	
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	class UCanvasPanel* InteractionPanel;
+	
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	class UImage* FlashbackImage;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidgetAnim), Transient)
@@ -48,6 +51,12 @@ public:
 
 	UFUNCTION()
 	void HideFlashback();
+
+	UFUNCTION()
+	void ShowInteraction();
+
+	UFUNCTION()
+	void HideInteraction();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayFlashbackFadeAnimation();

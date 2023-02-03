@@ -18,7 +18,7 @@ public:
 	// Sets default values for this actor's properties
 	ADialogStarter();
 	
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interactions)
 	TArray<FString> DialogsToShow;
 
 	UPROPERTY(BlueprintAssignable, Category=CustomEvents)

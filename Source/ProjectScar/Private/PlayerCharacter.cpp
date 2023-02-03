@@ -142,6 +142,7 @@ void APlayerCharacter::TryToInteract(const FInputActionValue& Value)
 	if(ObjNearToInteract != nullptr)
 	{
 		Cast<IIInteractable>(ObjNearToInteract)->Interact(this);
+		HideInteraction();
 	}
 }
 
@@ -177,6 +178,26 @@ void APlayerCharacter::HideDialog()
 	}
 }
 
+void APlayerCharacter::ShowInteraction()
+{
+	UDialogWidget* dialogWidget = Cast<UDialogWidget>(DialogInstance);
+
+	if(dialogWidget != nullptr)
+	{
+		dialogWidget->ShowInteraction();
+	}
+}
+
+void APlayerCharacter::HideInteraction()
+{
+	UDialogWidget* dialogWidget = Cast<UDialogWidget>(DialogInstance);
+
+	if(dialogWidget != nullptr)
+	{
+		dialogWidget->HideInteraction();
+	}
+}
+
 void APlayerCharacter::CureInfection(float InfectionToCure)
 {
 	CurrentInfectionValue += InfectionToCure;
@@ -206,6 +227,7 @@ void APlayerCharacter::OnBeginOverlapTriggerInteractions(UPrimitiveComponent* Ov
 		ObjNearToInteract = OtherActor;
 		interactuable->StartFocus();
 		GEngine->AddOnScreenDebugMessage(1, 1, FColor::Green, TEXT("Interactuable Obj in range"));
+		ShowInteraction();
 	}
 }
 
@@ -216,6 +238,7 @@ void APlayerCharacter::OnOverlapEndTriggerInteractions(UPrimitiveComponent* Over
 	{
 		Cast<IIInteractable>(ObjNearToInteract)->EndFocus();
 		ObjNearToInteract = nullptr;
+		HideInteraction();
 	}
 }
 

@@ -101,6 +101,9 @@ public:
 
 	void HideDialog();
 
+	void ShowInteraction();
+	void HideInteraction();
+
 	void CureInfection(float InfectionToCure);
 	
 	UFUNCTION()

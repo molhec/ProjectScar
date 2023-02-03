@@ -34,12 +34,12 @@ void AInteractuableTrigger::Interact(AActor* Caller)
 
 void AInteractuableTrigger::StartFocus()
 {
-	
+
 }
 
 void AInteractuableTrigger::EndFocus()
 {
-	
+
 }
 
 // Called every frame
